@@ -2,23 +2,23 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 	class User_data extends CI_Model{
-	   
+
        function __construct()
             {
-                
+
                 parent::__construct();
-            
+
             }
 
-        
+
         function my_user()
             {
-                	
-                    $query = $this->db->from('users')
-                		->where('user_mail', $this->input->post('user_mail'))
+
+                    $query = $this->db->from('empresa')
+                		->where('empresa_mail', $this->input->post('user_mail'))
                 		->get();
 
-                	if($query->num_rows()==1)
+            if($query->num_rows()==1)
                     {
         				return $query;
         			}
@@ -32,7 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         // update users data and password
         function user_update($id)
             {
-                
+
                 $user_data=array(
                         'user_name'=> $this->input->post('user_name'),
                         'user_lastName'=> $this->input->post('user_lastName'),
@@ -52,26 +52,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     return false;
                 }
             }
-        
-         
 
 
 
-        
-        //get all users         
+
+
+
+        //get all users
         function users($pagingConfig, $page)
             {
                 $query= $this->db
                         ->order_by('user_id', 'DESC')
                         ->get('users', $pagingConfig, ($page-1) * $pagingConfig);
-               
+
                 if($query->num_rows()>0)
                 {
-                    return $query;    
+                    return $query;
                 }
                 else
                 {
-                    return false; 
+                    return false;
                 }
             }
 
@@ -93,11 +93,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 {
                     return false;
                 }
-           
-    
+
+
 
         }
- 
+
 
 
 	}

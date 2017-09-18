@@ -5,8 +5,23 @@
 			parent:: __construct();
 		}
 
-		function rec_empresa_list(){
-			//$query = $this -> db -> get('periods');
+		function get_my_apps($id){
+			 $query = $this -> db -> where('app_empresa_id', $id)->where('app_publish', 1)-> get('apps');
+			 if($query->num_rows()>0){
+				 return $query->result();
+			 }else{
+				 return false;
+			 }
+		}
+
+		function get_app_byid($id){
+			$query = $this -> db ->where('app_id', $id)-> get('apps');
+			if($query->num_rows()>0){
+				return $query->result();
+			}else{
+				return false;
+			}
+
 		}
 
 		function empresa_add(){
@@ -22,35 +37,10 @@
 			return $insert;
 		}
 
-		function get_users($pagingConfig, $page){
-			return $this->db->get('candidatos', $pagingConfig, ($page-1) * $pagingConfig);
+		function get_users($pagingConfig, $page, $id){
+			return $this->db->where('au_app_id', $id)->get('app_user', $pagingConfig, ($page-1) * $pagingConfig);
 		}
 
-		function get_user_available($id){
-		
-			$sql = sprintf("
-				SELECT * 
-				FROM users_event, rec_empresa_user ",
-				$id);
-
-			$user_availables = $this->db->query($sql);
-
-			return $user_availables;
-		}
-
-		function get_user_not_available($id){
-			$sql = sprintf("
-				SELECT * 
-				FROM candidatos, empresa_candidatos 
-				WHERE empresa_candidatos.ec_empresa = %s 
-				AND candidatos.user_event_id = empresa_candidatos.ec_candidato", 
-				$id);
-
-			
-
-			$user_not = $this->db->query($sql);
-			return $user_not;
-		}
 
 		function get_empresa($id){
 			$empresa = $this->db
@@ -73,6 +63,18 @@
 
 		function empresa_delete($id){
 			$this->db->delete('empresa', array('empresa_id'=> $id));
+		}
+
+		function reporte_add(){
+			$new_rec_empresa_row = array(
+					'reporte_app_id'=> $this->input->post('app_id'),
+					'reporte_empresa_id'=> $this->input->post('empresa_id'),
+					'reporte_name'=> $this->input->post('reporte_tit'),
+				);
+
+			$insert = $this->db->insert('reportes', $new_rec_empresa_row);
+			return $insert;
+
 		}
 	}
 

@@ -24,20 +24,20 @@
 		<?}?>
 
 
-		<li id="temporadas">
+		<li id="empresa">
 			<a href="<?echo site_url();?>/admin_home/valid_user/empresa">
 				<i class="fa fa-building-o" aria-hidden="true"></i> Empresas
 			</a>
 		</li>
-		<li id="eventos">
-			<a href="<?echo site_url();?>/admin_home/valid_user/events">
-				<i class="fa fa-mobile" aria-hidden="true"></i> App</a>
+		<li id="app">
+			<a href="<?echo site_url();?>/admin_home/valid_user/app">
+				<i class="fa fa-mobile fa-lg" aria-hidden="true"></i> App</a>
 		</li>
 		<? if($this->session->userdata('user_admin')==0){?>
 			<?}?>
 		<li id="usuarios">
-			<a href="<?echo site_url();?>/admin_home/valid_user/candidato">
-				<i class="fa fa-sing-out" aria-hidden="true"></i> Usuarios de app</a>
+			<a href="<?echo site_url();?>/admin_home/valid_user/app_user">
+				<i class="fa fa-users" aria-hidden="true"></i> Usuarios de app</a>
 		</li>
 		<li>
 			<a href="<?echo site_url();?>/admin/logout">

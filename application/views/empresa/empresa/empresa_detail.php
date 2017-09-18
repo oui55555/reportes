@@ -71,44 +71,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
-      <h3>Lista de apps</h3>
-        <div class="table-responsive ">
-          <table class="table table-hover panel">
-            <thead>
-              <tr class="">
-                <th>Nombre</th>
-                <th></th>
-                <th></th>
-
-                <th></th>
-              </tr>
-            </thead>
-            <tbody >
-            <? foreach ($apps as $x ) { ?>
-                <tr>
-                  <td class="ue_name"><?= $x->app_name; ?> </td>
-                  <td class="ue_last"></td>
-                  <td class="ue_email"></td>
-
-                  <td>
-
-                  <a href="<?= site_Url(); ?>/admin_home/valid_user/app_detail/<?= $x->app_id ?>" class="btn btn-default btn-xs">Ver</a>
-                  </td>
-
-                </tr>
-            <? } ?>
-
-
-            </tbody>
-          </table>
-          <nav aria-label="Page navigation" class="txt_c">
-            <ul class="pagination">
-              <?= $this->pagination->create_links();?>
-            </ul>
-          </nav>
-        </div>
-   </div>
+<h3>Lista de Apps</h3>
 
 </div>
 

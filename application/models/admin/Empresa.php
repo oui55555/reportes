@@ -23,13 +23,13 @@
 		}
 
 		function get_users($pagingConfig, $page){
-			return $this->db->get('candidatos', $pagingConfig, ($page-1) * $pagingConfig);
+			return $this->db->get('app_user', $pagingConfig, ($page-1) * $pagingConfig);
 		}
 
 		function get_user_available($id){
-		
+
 			$sql = sprintf("
-				SELECT * 
+				SELECT *
 				FROM users_event, rec_empresa_user ",
 				$id);
 
@@ -40,13 +40,13 @@
 
 		function get_user_not_available($id){
 			$sql = sprintf("
-				SELECT * 
-				FROM candidatos, empresa_candidatos 
-				WHERE empresa_candidatos.ec_empresa = %s 
-				AND candidatos.user_event_id = empresa_candidatos.ec_candidato", 
+				SELECT *
+				FROM candidatos, empresa_candidatos
+				WHERE empresa_candidatos.ec_empresa = %s
+				AND candidatos.user_event_id = empresa_candidatos.ec_candidato",
 				$id);
 
-			
+
 
 			$user_not = $this->db->query($sql);
 			return $user_not;

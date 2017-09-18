@@ -2,18 +2,18 @@
 
  body{
  	font-family: 'Quicksand', sans-serif;
- 	
+
 	background-color: #efefef;
 	color: #333;
 
  }
 
 a {
-	
+
 }
 
 a:hover{
-	
+
 }
  /* === LOGIN === */
 
@@ -22,21 +22,21 @@ a:hover{
  		width: 80%;
  		background-color: #efefef;
  	}
- 	
+
  	 input{
  		border: 0;
  		color: #333;
- 		
+
  		background-color: transparent;
  	}
 
 
 
  	fieldset{
- 		
+
  		border-bottom: 1px solid #333;
  		color: #333;
- 		
+
  		margin-bottom: 12px;
  		padding:0 4px;
  		font-size: 1.3em;
@@ -52,7 +52,7 @@ a:hover{
 
 
  /* === LOGIN === */
- 
+
 
  /* === Menu === */
 
@@ -66,7 +66,7 @@ a:hover{
 	background-color: #fff;
 }
 
-.nav > li > a:focus, 
+.nav > li > a:focus,
 .nav > li > a:hover
 {
  background-color: rgba(255,255,255,0.5);
@@ -91,12 +91,15 @@ a:hover{
 		text-decoration: none;
 		background-color: #f3ad92;
  	}
-	
+
 	.list-group-item{
-		
+
 	}
+  .navbar-inverse{
+    border-radius: 0;
+  }
  /* === Bootstrap === */
- 
+
 
  /* === Library === */
  .centered{

@@ -1,6 +1,6 @@
 <?defined('BASEPATH') OR exit('No direct script access allowed');
 
-	class Admin_home extends CI_Controller{
+	class Empresa_home extends CI_Controller{
 
 
 
@@ -9,12 +9,8 @@
 	            parent::__construct();
 	           	$this->load->database();
 
-       	$this->load->model('admin/user_data');
-       	$this->load->model('admin/candidato');
-				$this->load->model('admin/empresa');
-
-				$this->load->model('app/app_model');
-
+       	$this->load->model('empresa/user_data');
+				$this->load->model('empresa/empresa');
 
        	$this->load->library('pagination');
        	$this->load->library('form_validation');
@@ -40,22 +36,21 @@
 					}
 				else
 					{
+
 						// variables for user data
 
-						$data['user_name']		= $this->session->user_name;
-						$data['user_last']		= $this->session->user_lastName;
-						$data['user_mail']		= $this->session->user_mail;
-						$data['user_admin']		= $this->session->user_admin;
-						$data['user_id']		= $this->session->user_id;
+						$data['empresa_tit']		= $this->session->empresa_tit;
+						$data['empresa_contacto']		= $this->session->empresa_contacto;
+						$data['empresa_mail']		= $this->session->empresa_mail;
+						$data['empresa_id']		= $this->session->empresa_id;
 
-						$admin = $this->session->user_admin;
-
-
+						$data['app']=$this->empresa->get_app_byid($this->uri->segment(4));
+						$data['my_apps']=$this->empresa->get_my_apps($this->session->empresa_id);
 					// Menu for a valid user
 					switch ($section) {
 
-						    case 'home':$admin_url='admin/my_profile/profile'; break;
-						    case 'my_profile': $admin_url='admin/my_profile/profile'; break;
+						    case 'home':$admin_url='empresa/home/dashboard'; break;
+						    case 'my_profile': $admin_url='empresa/my_profile/profile'; break;
 
 
 						        break;
@@ -63,10 +58,10 @@
 
 
 						    	if($this->user_data->user_update($this->input->post('user_id'))){
-						    		$admin_url='admin/my_profile/profile';
+						    		$admin_url='empresa/my_profile/profile';
 
 						    	}else{
-						    		$admin_url='admin/my_profile/profile';
+						    		$admin_url='empresa/my_profile/profile';
 
 						    	}
 
@@ -95,30 +90,30 @@
 							        $admin_url='admin/users/users_list';
 							        $data['users']=$this->user_data->users(20, $this->uri->segment(4, 1));
 
-												$this->init_pagination('/admin_home/valid_user/users', $this->db->count_all('users'), 20, 4);
+										$this->init_pagination('/admin_home/valid_user/users', $this->db->count_all('users'), 20, 4);
 
-											if($this->input->post('validation'))
-											{
-												$this->create_user();
-											}
+									if($this->input->post('validation'))
+									{
+										$this->create_user();
+									}
 
-											// in case this delete
-											if($this->uri->segment(4))
-												{
-													$this->load->model('membership_model');
-													$this->membership_model->delete_users($this->uri->segment(4));
-												}
-
-
-										}
-										else
+									// in case this delete
+									if($this->uri->segment(4))
 										{
+											$this->load->model('membership_model');
+											$this->membership_model->delete_users($this->uri->segment(4));
+										}
+
+
+									}
+									else
+									{
 
 										$admin_url='admin/';
 
-								}
+									}
 
-									break;
+							  break;
 
 
 						    case 'empresa':
@@ -141,8 +136,8 @@
 						        		$this->empresa->empresa_edit();
 						        	}
 
-						         $data['apps'] = $this->app_model->get_app_empresa($this->uri->segment(4));
-
+						        // $data['user_available'] = $this->empresa->get_users(20, $this->uri->segment(5, 1));
+										//
 						        // $data['user_not_available'] = $this->empresa->get_user_not_available($this->uri->segment(4));
 
 						        $data['empresa'] = $this->empresa->get_empresa($this->uri->segment(4));
@@ -165,44 +160,30 @@
 
 								case 'app':
 									$admin_url='admin/app/add';
-									$data['empresa'] = $this->db->order_by('empresa_tit', 'DESC')->get('empresa');
-									$data['empresas'] = $this->app_model->get_apps();
 
-									if($this->input->post('add_app'))
-											 {
-												 $this->create_app();
-											 }
+								break;
 
-									 // in case this delete
-									 if($this->uri->segment(4) || $this->uri->segment(4) != 0)
-											 {
-												//  $this->load->model('admin/candidato');
-												//  $this->candidato->delete_users($this->uri->segment(4), $this->uri->segment(5));
-											 }
-
-									 //in case this update
-									 if($this->input->post('app_edit'))
-										 {
-											//  $this->load->model('admin/candidato');
-											//  $this->candidato->update_users($this->uri->segment(5));
-										 }
+								case 'add_reporte':
+									$admin_url = 'empresa/app/add_reporte';
+									//in case this add users
+								 if($this->input->post('add_reporte'))
+									{
+										$this->create_reporte();
+									}
 
 
 
 								break;
-
-								case 'app_detail':
-									$admin_url="admin/app/app_detail";
-									$data['app'] = $this->app_model->get_app_byid($this->uri->segment(4));
-
+								case 'my_app':
+									$admin_url='empresa/app/home';
 
 								break;
 
 								case 'app_user':
 
-						        $admin_url='admin/app_user/single_add';
+						        $admin_url='empresa/app/user';
 
-						        	$data['users_event'] = $this->empresa->get_users(20, $this->uri->segment(5, 1));
+						        $data['users'] = $this->empresa->get_users(20, $this->uri->segment(5, 1), $this->uri->segment(4));
 
 
 						        //in case this add users
@@ -210,18 +191,12 @@
 									{
 										$this->create_candidato();
 									}
-										// in case this delete
-										if($this->uri->segment(4) || $this->uri->segment(4) != 0)
-											{
-												$this->load->model('admin/candidato');
-												$this->candidato->delete_users($this->uri->segment(4), $this->uri->segment(5));
-											}
-										//in case this update
-										if($this->input->post('user_event_edit'))
-										{
-											$this->load->model('admin/candidato');
-											$this->candidato->update_users($this->uri->segment(5));
-										}
+								//in case this update
+								if($this->input->post('user_event_edit'))
+								{
+									$this->load->model('admin/candidato');
+									$this->candidato->update_users($this->uri->segment(5));
+								}
 
 						        // $this->init_pagination('/admin_home/valid_user/candidato/0/', $this->db->count_all_results('candidatos'), 20, 5);
 
@@ -237,7 +212,7 @@
 
 						$data['main_content']= $admin_url;
 
-						$this->load->view('admin/home/template', $data);
+						$this->load->view('empresa/home/template', $data);
 
 					}
 	        	}
@@ -402,42 +377,7 @@
 			}
 
 
-		function create_app(){
-			$config = array(
-								array(
-												'field' => 'app_name',
-												'label' => 'Nombre de app',
-												'rules' => 'trim|required',
-												'errors'=> array(
-														'required'=>'Ingresa tu %s.'
-													)
-								),
-								array(
-												'field' => 'empresa_id',
-												'label' => 'Empresa',
-												'rules' => 'trim|required',
-												'errors'=> array(
-														'required'=>'Selecciona una %s.'
-													)
-								)
-								);
-				$this->form_validation->set_rules($config);
 
-				if($this->form_validation->run()==FALSE){
-					//in case there is something wrong we go back and show warnings
-					$admin_url='admin/app/app';
-				}
-				else
-				{
-					//when is all rigth we load
-					$this->load->model('app/app_model');
-					if( $query = $this->app_model->add_app() ){
-						redirect('admin_home/valid_user/app');
-					}else{
-						$this->load->view('admin_home/valid_user/app');
-					}
-				}
-		}
 		function change_password($id){
 				$config = array(
 				        array(
@@ -480,6 +420,59 @@
 		}
 
 
+		function create_reporte(){
+
+
+			$config = array(
+
+			        array(
+			                'field' => 'reporte_tit',
+			                'label' => 'Nombre de reporte',
+			                'rules' => 'trim|required',
+			                'errors'=> array(
+			                		'required'=>'Ingresa tu %s.'
+			                	)
+			        )
+			);
+
+				$this->form_validation->set_rules($config);
+
+				if($this->form_validation->run()==FALSE){
+					//in case there is something wrong we go back and show warnings
+					$admin_url='empresa/app/add_reporte';
+				}
+				else
+				{
+					//when is all rigth we load
+					if( $query = $this->empresa->reporte_add() ){
+
+
+						//send a mail to user giving password
+
+						$user_name = $this->input->post('user_name');
+						$user_mail = $this->input->post('user_mail');
+						$user_pass = $this->input->post('user_password');
+						$message = 'Estimado/a:'
+									.$user_name
+									.' se ha creado un usuario para el sistema de eventos.'
+									.'Usuario: '
+									.$user_mail
+									.' contraseña:'
+									.$user_mail;
+
+						$this->email->from('no-replay@example.com', 'Sistema de eventos');
+						$this->email->to($this->input->post($user_mail));
+						$this->email->subject('Usuario creado');
+						$this->email->message($message);
+						$this->email->send();
+
+						redirect('empresa_home/valid_user/add_reporte');
+					}else{
+						$this->load->view('empresa_home/valid_user/add_reporte');
+					}
+				}
+
+		}
 		function create_candidato(){
 
 
